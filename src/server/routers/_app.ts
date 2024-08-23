@@ -1,21 +1,10 @@
-import { z } from "zod";
-import { procedure, router } from "../trpc";
-import { PrismaClient } from "@prisma/client";
+import { router } from "../trpc";
+import { employeeRouter } from "./employeeRouter";
 
-const prisma = new PrismaClient();
-
+// Combine your individual routers into the main application router
 export const appRouter = router({
-  getAllBenchmarks: procedure.query(async ({ input }) => {
-    return await prisma.benchmark.findMany();
-  }),
-  getBenchmarks: procedure
-    .input(z.object({ metric: z.string() }))
-    .query(async ({ input }) => {
-      return await prisma.benchmark.findMany({
-        where: { metric: input.metric },
-      });
-    }),
+  employee: employeeRouter,
+  // Add other routers here as your app grows
 });
 
-// export type definition of API
 export type AppRouter = typeof appRouter;

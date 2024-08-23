@@ -7,9 +7,58 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Benchmark {
-  id        Int      @id @default(autoincrement())
-  metric    String
-  value     Float
-  createdAt DateTime @default(now())
+model Employee {
+  id          Int       @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  gender      String
+  birthDate   DateTime
+  hireDate    DateTime
+  department  Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  jobTitle    String
+  salaries    Salary[]
+  reviews     PerformanceReview[]
+  turnovers   Turnover[]
+}
+
+model Department {
+  id          Int       @id @default(autoincrement())
+  departmentName String
+  employees   Employee[]
+  hirings     Hiring[]
+}
+
+model Salary {
+  id          Int       @id @default(autoincrement())
+  employee    Employee   @relation(fields: [employeeId], references: [id])
+  employeeId  Int
+  salaryAmount Float
+  salaryDate  DateTime
+}
+
+model PerformanceReview {
+  id          Int       @id @default(autoincrement())
+  employee    Employee   @relation(fields: [employeeId], references: [id])
+  employeeId  Int
+  reviewDate  DateTime
+  rating      Int
+  reviewer    String
+}
+
+model Turnover {
+  id          Int       @id @default(autoincrement())
+  employee    Employee   @relation(fields: [employeeId], references: [id])
+  employeeId  Int
+  turnoverDate DateTime
+  reason      String
+}
+
+model Hiring {
+  id          Int       @id @default(autoincrement())
+  position    String
+  department  Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+  hireDate    DateTime
+  hiredCandidateId Int?
 }
