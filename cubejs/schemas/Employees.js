@@ -1,44 +1,48 @@
-cube(`Employees`, {
-  sql: `SELECT * FROM employees`,
+cube(`Employee`, {
+  sql: `SELECT * FROM Employee`,
 
   joins: {
-    Departments: {
+    Department: {
+      sql: `${CUBE}.departmentId = ${Department}.id`,
       relationship: `belongsTo`,
-      sql: `${CUBE}.department_id = ${Departments}.id`,
+    },
+    Salary: {
+      sql: `${CUBE}.id = ${Salary}.employeeId`,
+      relationship: `hasMany`,
     },
   },
 
   measures: {
     count: {
       type: `count`,
-      drillMembers: [firstName, lastName, hireDate, departmentId],
+      drillMembers: [id, firstName, lastName],
+    },
+    averageSalary: {
+      type: `avg`,
+      sql: `${Salary}.salaryAmount`,
     },
   },
 
   dimensions: {
-    employeeId: {
-      sql: `employee_id`,
+    id: {
+      sql: `id`,
       type: `number`,
       primaryKey: true,
     },
-
     firstName: {
-      sql: `first_name`,
+      sql: `firstName`,
       type: `string`,
     },
-
     lastName: {
-      sql: `last_name`,
+      sql: `lastName`,
       type: `string`,
     },
-
-    gender: {
-      sql: `gender`,
+    jobTitle: {
+      sql: `jobTitle`,
       type: `string`,
     },
-
     hireDate: {
-      sql: `hire_date`,
+      sql: `hireDate`,
       type: `time`,
     },
   },
