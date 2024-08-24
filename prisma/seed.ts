@@ -63,17 +63,17 @@ async function main() {
     data: [
       {
         employeeId: john.id,
-        salaryAmount: 85000,
+        salaryAmount: "85000",
         salaryDate: new Date("2023-01-01"),
       },
       {
         employeeId: jane.id,
-        salaryAmount: 75000,
+        salaryAmount: "75000",
         salaryDate: new Date("2023-01-01"),
       },
       {
         employeeId: emily.id,
-        salaryAmount: 65000,
+        salaryAmount: "65000",
         salaryDate: new Date("2023-01-01"),
       },
     ],

@@ -16,6 +16,7 @@
     "@trpc/react": "^9.27.4",
     "@trpc/react-query": "^10.45.2",
     "@trpc/server": "^10.45.2",
+    "axios": "^1.7.4",
     "chart.js": "^4.4.3",
     "next": "14.2.5",
     "react": "^18",

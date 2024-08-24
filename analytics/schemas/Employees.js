@@ -20,6 +20,7 @@ cube(`Employee`, {
     averageSalary: {
       type: `avg`,
       sql: `${Salary}.salaryAmount`,
+      title: `Average Salary`,
     },
   },
 
@@ -44,6 +45,10 @@ cube(`Employee`, {
     hireDate: {
       sql: `hireDate`,
       type: `time`,
+    },
+    departmentId: {
+      sql: `departmentId`,
+      type: `number`,
     },
   },
 });

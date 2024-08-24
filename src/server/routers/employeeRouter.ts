@@ -1,4 +1,5 @@
 import { z } from "zod";
+import axios from "axios";
 import { procedure, router } from "../trpc";
 import { PrismaClient } from "@prisma/client";
 
@@ -21,6 +22,39 @@ export const employeeRouter = router({
     }
   }),
 
+  getAverageSalaryByDepartment: procedure
+    .input(
+      z.object({
+        departmentId: z.number(),
+      })
+    )
+    .query(async ({ input }) => {
+      try {
+        const response = await axios.get(
+          "http://localhost:4000/cubejs-api/v1/load",
+          {
+            params: {
+              measures: ["Employee.averageSalary"],
+              filters: [
+                {
+                  dimension: "Employee.departmentId",
+                  operator: "equals",
+                  values: [input.departmentId],
+                },
+              ],
+            },
+            headers: {
+              Authorization: `Bearer YOUR_CUBEJS_API_TOKEN`, // Use your Cube.js API token
+            },
+          }
+        );
+
+        return response.data;
+      } catch (error) {
+        throw new Error("Failed to fetch average salary");
+      }
+    }),
+
   // Query to fetch  salary by department
   getSalaryByDepartment: procedure
     .input(
@@ -42,29 +76,29 @@ export const employeeRouter = router({
       }
     }),
 
-  // Query to fetch average salary by department
-  getAverageSalaryByDepartment: procedure
-    .input(
-      z.object({
-        departmentId: z.number(),
-      })
-    )
-    .query(async ({ input }) => {
-      try {
-        return await prisma.salary.aggregate({
-          _avg: {
-            salaryAmount: true,
-          },
-          where: {
-            employee: {
-              departmentId: input.departmentId,
-            },
-          },
-        });
-      } catch (error) {
-        throw new Error("Failed to fetch average salary");
-      }
-    }),
+  // // Query to fetch average salary by department
+  // getAverageSalaryByDepartment: procedure
+  //   .input(
+  //     z.object({
+  //       departmentId: z.number(),
+  //     })
+  //   )
+  //   .query(async ({ input }) => {
+  //     try {
+  //       return await prisma.salary.aggregate({
+  //         _avg: {
+  //           salaryAmount: true,
+  //         },
+  //         where: {
+  //           employee: {
+  //             departmentId: input.departmentId,
+  //           },
+  //         },
+  //       });
+  //     } catch (error) {
+  //       throw new Error("Failed to fetch average salary");
+  //     }
+  //   }),
 
   // Query to fetch employees by department ID
   getEmployeesByDepartment: procedure
